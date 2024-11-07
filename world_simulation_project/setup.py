@@ -5,7 +5,11 @@ package_name = 'world_simulation_project'
 data_files = []
 data_files.append(('share/ament_index/resource_index/packages', ['resource/' + package_name]))
 data_files.append(('share/' + package_name + '/launch', ['launch/simulation_launch.py']))
+data_files.append(('share/' + package_name + '/launch', ['launch/daytime_launch.py']))
+data_files.append(('share/' + package_name + '/launch', ['launch/dusk_launch.py']))
 data_files.append(('share/' + package_name + '/worlds', ['worlds/bryce_lawn_apartment.wbt']))
+data_files.append(('share/' + package_name + '/worlds', ['worlds/rec_center_fields_daytime.wbt']))
+data_files.append(('share/' + package_name + '/worlds', ['worlds/rec_center_fields_dusk.wbt']))
 data_files.append(('share/' + package_name, ['package.xml']))
 data_files.append(('share/' + package_name + '/resource', [
     'resource/turtlebot_webots.urdf',
