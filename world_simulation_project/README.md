@@ -10,12 +10,12 @@ To run the daytime world simulation, navigate to the f24_robotics directory in t
 source /opt/ros/humble/setup.bash
 colcon build
 source install/setup.bash
-ros2 launch outdoor_simulation_project daytime_launch.py
+ros2 launch world_simulation_project daytime_launch.py
 ```
 
 To run the nightime word simulation, use the launch command:
 ```
-ros2 launch outdoor_simulation_project dusk_launch.py
+ros2 launch world_simulation_project dusk_launch.py
 ```
 
 ## Traffic lights
