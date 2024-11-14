@@ -33,7 +33,10 @@ setup(
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
-        'launch.frontend.launch_extension': ['launch_ros = launch_ros']
+        'launch.frontend.launch_extension': ['launch_ros = launch_ros'],
+        'console_scripts': [
+            'webots_ros2_homework1_python = webots_apriltags.webots_ros2_homework1_python:main',
+        ],
     },
 
 )
