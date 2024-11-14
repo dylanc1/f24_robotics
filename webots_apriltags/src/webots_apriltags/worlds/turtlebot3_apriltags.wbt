@@ -1,4 +1,5 @@
-#VRML_SIM R2023a utf8
+#VRML_SIM R2023b utf8
+
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/devices/robotis/protos/RobotisLds01.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/cabinet/protos/Cabinet.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/master/projects/objects/tables/protos/Table.proto"
@@ -11,10 +12,9 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/robotis/turtlebot/protos/TurtleBot3Burger.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/lights/protos/CeilingLight.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/cabinet/protos/CabinetHandle.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/adept/pioneer3/protos/Pioneer3dx.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/devices/microsoft/protos/Kinect.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/PaintedWood.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/monicadelaine/webots_apriltag/master/apriltags/protos/tag36_11_00000.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/obstacles/protos/OilBarrel.proto"
 
 WorldInfo {
   info [
@@ -23,19 +23,22 @@ WorldInfo {
   basicTimeStep 16
 }
 Viewpoint {
-  orientation -0.147 -0.461 0.875 5.58
-  position -7.84 -5.72 0.285
+  orientation 0.16767309233859312 0.30303647753488416 -0.9381122680089325 1.0695954757116206
+  position -7.011567204374049 -1.7206312361443814 2.991702273611898
   exposure 0.5
   follow "TurtleBot3Burger"
 }
-
-tag36_11_00000{
-  rotation 0 0 1 0
+OilBarrel {
+  translation -3.08 -7.53 0.3
+  height 0.6
+  radius 0.25
+}
+tag36_11_00000 {
   translation 0 0 0.15
 }
 TurtleBot3Burger {
   translation -0.559 -0.0183 0
-  rotation -0.00119 -0.0183 -1 0.126
+  rotation -0.0011897999483280344 -0.018296923575128597 -0.9998318893512894 0.126
   controller "<extern>"
   controllerArgs [
     ""
@@ -51,20 +54,17 @@ TurtleBot3Burger {
       translation 0.06 0 0
       children [
         Pose {
-          translation 0 0 0
           rotation 0 1 0 1.57
         }
       ]
+      fieldOfView 1
       width 3280
       height 2464
-      fieldOfView 1
     }
-
     RobotisLds01 {
     }
   ]
 }
-
 CeilingLight {
   translation -6.4341 -1.0406 5
   name "ceiling light 1"
@@ -647,5 +647,26 @@ DEF DESKSIDE Solid {
   name "deskside(1)"
   boundingObject USE DESKSIDE
 }
-
-
+Wall {
+  translation -3.24169 -1.10324 0
+  rotation 0 0 1 1.1
+  size 0.06 2.5 0.5
+}
+Wall {
+  translation -9.41444 -1.57634 -0.02
+  rotation 0 0 1 1.5708
+  name "wall(2)"
+  size 0.06 3.2 0.5
+}
+Wall {
+  translation -10.9944 -4.73634 -0.02
+  rotation 0 0 1 -3.1415853071795863
+  name "wall(3)"
+  size 0.06 8 0.5
+}
+Wall {
+  translation -6.72768 -1.01766 -0.01
+  rotation 6.96414e-09 9.58979e-09 -1 1.1
+  name "wall(1)"
+  size 0.06 2.5 0.5
+}
