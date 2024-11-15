@@ -82,7 +82,7 @@ class WallFollow(Node):
     def listener_callback2(self, msg2):
         position = msg2.pose.pose.position
         (posx, posy, posz) = (position.x, position.y, position.z)
-        self.get_logger().info('self position: {},{},{}'.format(posx,posy,posz))
+        #self.get_logger().info('self position: {},{},{}'.format(posx,posy,posz))
 
         if self.position_it % 10 == 0:
             self.position_log.append([posx, posy, posz])
@@ -129,7 +129,7 @@ class WallFollow(Node):
             self.rotatetimer = ROTATION_LENGTH
         if self.rotation_wait >= 0:
             self.rotation_wait -= 1
-            self.get_logger().warning(f'Time til 360: {self.rotation_wait}')
+        self.get_logger().warning(f'Time til 360: {self.rotation_wait}')
         
         
 
