@@ -70,7 +70,7 @@ class WallFollow(Node):
        
         # Assume 360 range measurements
         for reading in scan:
-            if reading == float('Inf'):
+            if reading == float(0.0):
                 self.scan_cleaned.append(3.5)
             elif math.isnan(reading):
                 self.scan_cleaned.append(0.0)
@@ -115,8 +115,9 @@ class WallFollow(Node):
             self.turtlebot_moving = False
             return
 
-
-        front_lidar_min = min(self.scan_cleaned[LEFT_FRONT_INDEX:RIGHT_FRONT_INDEX])
+        front_lidar_left = min(self.scan_cleaned[0:30])
+        front_lidar_right = min(self.scan_cleaned[330:])
+        front_lidar_min = min(front_lidar_left, front_lidar_right)
         
         left_lidar_back = min(self.scan_cleaned[LEFT_BACK_INDEX-20:LEFT_BACK_INDEX+20])
         left_lidar_side = min(self.scan_cleaned[LEFT_SIDE_INDEX-20:LEFT_SIDE_INDEX+20])
