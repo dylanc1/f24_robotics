@@ -25,6 +25,8 @@ LEFT_FRONT_INDEX=150
 LEFT_SIDE_INDEX=90
 LEFT_MIDDLE_INDEX=120
 LEFT_BACK_INDEX=45
+ROTATION_WAIT=80
+ROTATION_LENGTH=48
 
 class WallFollow(Node):
 
@@ -56,6 +58,8 @@ class WallFollow(Node):
         self.position_log = []
         self.position_it = 0
         self.stall_idx = -1
+        self.rotation_wait = ROTATION_WAIT   
+        self.rotatetimer = 0
         
 
     # Clean lidar readings
@@ -109,7 +113,8 @@ class WallFollow(Node):
         if (len(self.scan_cleaned)==0):
             self.turtlebot_moving = False
             return
-        
+
+
         front_lidar_min = min(self.scan_cleaned[LEFT_FRONT_INDEX:RIGHT_FRONT_INDEX])
         
         left_lidar_back = min(self.scan_cleaned[LEFT_BACK_INDEX-20:LEFT_BACK_INDEX+20])
@@ -118,6 +123,15 @@ class WallFollow(Node):
         left_lidar_middle = min(self.scan_cleaned[LEFT_MIDDLE_INDEX:LEFT_FRONT_INDEX])
 
         
+        if self.rotation_wait == 0:
+            self.rotatetimer = ROTATION_LENGTH
+        if self.rotation_wait >= 0:
+            self.rotation_wait -= 1
+            self.get_logger().warning(f'Time til 360: {self.rotation_wait}')
+        
+        
+
+            
         if front_lidar_min < SAFE_STOP_DISTANCE: # Stopping
             if self.turtlebot_moving == True:
                 self.cmd.linear.x = 0.0 
@@ -126,6 +140,15 @@ class WallFollow(Node):
                 self.turtlebot_moving = False
                 self.get_logger().info('Stopping')
                 return
+        elif self.rotatetimer >= 1:
+            self.cmd.angular.z = -1.0
+            self.cmd.linear.x = 0.0
+            self.rotatetimer -= 1
+            self.publisher_.publish(self.cmd)
+            self.get_logger().warning(f'Time left in 360: {self.rotatetimer}')
+            if self.rotatetimer == 0:
+                self.rotation_wait = ROTATION_WAIT
+            return
         elif self.stall and front_lidar_min < LIDAR_WALL_DISTANCE and left_lidar_middle < LIDAR_WALL_DISTANCE: # Stall Recovery
             if self.stall == 1: # First, reverse to the right
                 self.cmd.linear.x = -0.1 
