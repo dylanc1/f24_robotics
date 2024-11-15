@@ -27,6 +27,7 @@ LEFT_MIDDLE_INDEX=120
 LEFT_BACK_INDEX=45
 ROTATION_WAIT=80
 ROTATION_LENGTH=48
+MOVEMENT_FACTOR=0.5
 
 class WallFollow(Node):
 
@@ -134,16 +135,16 @@ class WallFollow(Node):
             
         if front_lidar_min < SAFE_STOP_DISTANCE: # Stopping
             if self.turtlebot_moving == True:
-                self.cmd.linear.x = 0.0 
-                self.cmd.angular.z = 0.0 
+                self.cmd.linear.x = 0.0 * MOVEMENT_FACTOR
+                self.cmd.angular.z = 0.0 * MOVEMENT_FACTOR
                 self.publisher_.publish(self.cmd)
                 self.turtlebot_moving = False
                 self.get_logger().info('Stopping')
                 return
         elif self.rotatetimer >= 1:
-            self.cmd.angular.z = -1.0
+            self.cmd.angular.z = -1.0 * MOVEMENT_FACTOR
             self.cmd.linear.x = 0.0
-            self.rotatetimer -= 1
+            self.rotatetimer -= 1 * MOVEMENT_FACTOR
             self.publisher_.publish(self.cmd)
             self.get_logger().warning(f'Time left in 360: {self.rotatetimer}')
             if self.rotatetimer == 0:
@@ -151,38 +152,38 @@ class WallFollow(Node):
             return
         elif self.stall and front_lidar_min < LIDAR_WALL_DISTANCE and left_lidar_middle < LIDAR_WALL_DISTANCE: # Stall Recovery
             if self.stall == 1: # First, reverse to the right
-                self.cmd.linear.x = -0.1 
-                self.cmd.angular.z = -1.0
+                self.cmd.linear.x = -0.1 * MOVEMENT_FACTOR
+                self.cmd.angular.z = -1.0 * MOVEMENT_FACTOR
             else: # Next, move forward to the right
-                self.cmd.linear.x = 0.15 
-                self.cmd.angular.z = -1.1
+                self.cmd.linear.x = 0.15 * MOVEMENT_FACTOR
+                self.cmd.angular.z = -1.1 * MOVEMENT_FACTOR
             self.publisher_.publish(self.cmd)
             self.get_logger().info('De-stalling')
         elif front_lidar_min < LIDAR_AVOID_DISTANCE: 
-            self.cmd.linear.x = 0.04
+            self.cmd.linear.x = 0.04 * MOVEMENT_FACTOR
             if left_lidar_middle > 1.3 * left_lidar_side and left_lidar_side > LIDAR_WALL_DISTANCE and front_lidar_min > LIDAR_WALL_DISTANCE:
-                self.cmd.angular.z = 0.25
+                self.cmd.angular.z = 0.25 * MOVEMENT_FACTOR
                 self.get_logger().warning('rotating left')
             else:
-                self.cmd.angular.z = -0.3
+                self.cmd.angular.z = -0.3 * MOVEMENT_FACTOR
                 self.get_logger().warning('rotating right')
             self.publisher_.publish(self.cmd)
             self.turtlebot_moving = True
         elif left_lidar_back < front_lidar_min and (left_lidar_back < left_lidar_side or left_lidar_side < left_lidar_middle) and min(left_lidar_middle, left_lidar_side) > LIDAR_WALL_DISTANCE:
-            self.cmd.linear.x = 0.04
-            self.cmd.angular.z = 0.4
+            self.cmd.linear.x = 0.04 * MOVEMENT_FACTOR
+            self.cmd.angular.z = 0.4 * MOVEMENT_FACTOR
             self.get_logger().warning('rotating slightly more left')
             self.publisher_.publish(self.cmd)
             self.turtlebot_moving = True
         elif left_lidar_side <= front_lidar_min and min(left_lidar_side, left_lidar_middle) > LIDAR_WALL_DISTANCE: # Left adjust
-            self.cmd.linear.x = 0.15
-            self.cmd.angular.z = 0.25
+            self.cmd.linear.x = 0.15 * MOVEMENT_FACTOR
+            self.cmd.angular.z = 0.25 * MOVEMENT_FACTOR
             self.get_logger().warning('rotating slightly left')
             self.publisher_.publish(self.cmd)
             self.turtlebot_moving = True
         else: # Basic straightforward movement
-            self.cmd.linear.x = 0.3
-            self.cmd.angular.z = 0.0
+            self.cmd.linear.x = 0.3 * MOVEMENT_FACTOR
+            self.cmd.angular.z = 0.0 * MOVEMENT_FACTOR
             self.publisher_.publish(self.cmd)
             self.get_logger().info('Not Turning')
             self.turtlebot_moving = True
