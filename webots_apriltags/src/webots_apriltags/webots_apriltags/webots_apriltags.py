@@ -19,12 +19,12 @@ LIDAR_ERROR = 0.05
 LIDAR_AVOID_DISTANCE = 0.7
 LIDAR_WALL_DISTANCE = 0.45
 SAFE_STOP_DISTANCE = STOP_DISTANCE + LIDAR_ERROR
-RIGHT_SIDE_INDEX = 270
-RIGHT_FRONT_INDEX = 210
-LEFT_FRONT_INDEX=150
+RIGHT_SIDE_INDEX=270  
+RIGHT_FRONT_INDEX=330 # 210
+LEFT_FRONT_INDEX=30 # 150
 LEFT_SIDE_INDEX=90
-LEFT_MIDDLE_INDEX=120
-LEFT_BACK_INDEX=45
+LEFT_MIDDLE_INDEX=60 # 120
+LEFT_BACK_INDEX=135 # 45
 ROTATION_WAIT=30
 ROTATION_LENGTH=24
 MOVEMENT_FACTOR=0.5
@@ -70,7 +70,7 @@ class WallFollow(Node):
        
         # Assume 360 range measurements
         for reading in scan:
-            if reading == float(0.0):
+            if reading == float(0.0) or reading == float('inf'):
                 self.scan_cleaned.append(3.5)
             elif math.isnan(reading):
                 self.scan_cleaned.append(0.0)
@@ -122,7 +122,7 @@ class WallFollow(Node):
         left_lidar_back = min(self.scan_cleaned[LEFT_BACK_INDEX-20:LEFT_BACK_INDEX+20])
         left_lidar_side = min(self.scan_cleaned[LEFT_SIDE_INDEX-20:LEFT_SIDE_INDEX+20])
         
-        left_lidar_middle = min(self.scan_cleaned[LEFT_MIDDLE_INDEX:LEFT_FRONT_INDEX])
+        left_lidar_middle = min(self.scan_cleaned[LEFT_FRONT_INDEX:LEFT_MIDDLE_INDEX]) # LEFT_MIDDLE_INDEX:LEFT_FRONT_INDEX
 
         
         if self.rotation_wait == 0:
