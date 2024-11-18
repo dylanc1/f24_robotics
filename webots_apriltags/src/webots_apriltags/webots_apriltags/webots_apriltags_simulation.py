@@ -25,8 +25,8 @@ LEFT_FRONT_INDEX=150
 LEFT_SIDE_INDEX=90
 LEFT_MIDDLE_INDEX=120
 LEFT_BACK_INDEX=45
-ROTATION_WAIT=30
-ROTATION_LENGTH=24
+ROTATION_WAIT=80
+ROTATION_LENGTH=48
 MOVEMENT_FACTOR=0.5
 
 class WallFollow(Node):
@@ -70,7 +70,7 @@ class WallFollow(Node):
        
         # Assume 360 range measurements
         for reading in scan:
-            if reading == float(0.0):
+            if reading == float('Inf'):
                 self.scan_cleaned.append(3.5)
             elif math.isnan(reading):
                 self.scan_cleaned.append(0.0)
@@ -82,7 +82,7 @@ class WallFollow(Node):
     def listener_callback2(self, msg2):
         position = msg2.pose.pose.position
         (posx, posy, posz) = (position.x, position.y, position.z)
-        #self.get_logger().info('self position: {},{},{}'.format(posx,posy,posz))
+        self.get_logger().info('self position: {},{},{}'.format(posx,posy,posz))
 
         if self.position_it % 10 == 0:
             self.position_log.append([posx, posy, posz])
@@ -115,9 +115,8 @@ class WallFollow(Node):
             self.turtlebot_moving = False
             return
 
-        front_lidar_left = min(self.scan_cleaned[0:30])
-        front_lidar_right = min(self.scan_cleaned[330:])
-        front_lidar_min = min(front_lidar_left, front_lidar_right)
+
+        front_lidar_min = min(self.scan_cleaned[LEFT_FRONT_INDEX:RIGHT_FRONT_INDEX])
         
         left_lidar_back = min(self.scan_cleaned[LEFT_BACK_INDEX-20:LEFT_BACK_INDEX+20])
         left_lidar_side = min(self.scan_cleaned[LEFT_SIDE_INDEX-20:LEFT_SIDE_INDEX+20])
@@ -129,7 +128,7 @@ class WallFollow(Node):
             self.rotatetimer = ROTATION_LENGTH
         if self.rotation_wait >= 0:
             self.rotation_wait -= 1
-        self.get_logger().warning(f'Time til 360: {self.rotation_wait}')
+            self.get_logger().warning(f'Time til 360: {self.rotation_wait}')
         
         
 
@@ -145,7 +144,7 @@ class WallFollow(Node):
         elif self.rotatetimer >= 1:
             self.cmd.angular.z = -1.0 * MOVEMENT_FACTOR
             self.cmd.linear.x = 0.0
-            self.rotatetimer -= 1
+            self.rotatetimer -= 1 * MOVEMENT_FACTOR
             self.publisher_.publish(self.cmd)
             self.get_logger().warning(f'Time left in 360: {self.rotatetimer}')
             if self.rotatetimer == 0:
